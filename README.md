@@ -2,19 +2,11 @@
 
 I want to build a production-quality university academic companion web application.
 
-
-
 IMPORTANT: Do NOT try to build every feature at once. This is Phase 1. First understand the requirements, establish a scalable architecture and database structure, and build the foundation correctly. We will implement the remaining features in later prompts.
-
-
 
 PROJECT CONCEPT
 
-
-
 The application will allow university students to select their:
-
-
 
 - Department
 
@@ -22,15 +14,9 @@ The application will allow university students to select their:
 
 - Section
 
-
-
 and then access their complete academic routine.
 
-
-
 The platform will eventually provide:
-
-
 
 1. Student routine
 
@@ -64,23 +50,13 @@ The platform will eventually provide:
 
 16. Eventually an AI-powered academic assistant
 
-
-
 The application should be designed so that these features can be added without restructuring the database later.
-
-
 
 ---
 
-
-
 PHASE 1 OBJECTIVE
 
-
-
 For this phase, focus on:
-
-
 
 1. Project architecture
 
@@ -102,23 +78,13 @@ For this phase, focus on:
 
 10. Scalable and maintainable code structure
 
-
-
 Do not implement the AI assistant, advanced notifications, exam management, or other future features yet.
-
-
 
 ---
 
-
-
 TECH STACK
 
-
-
 Use:
-
-
 
 - React
 
@@ -138,39 +104,21 @@ Use:
 
 - Supabase Storage where needed later
 
-
-
 Keep the application suitable for deployment on Vercel.
-
-
 
 Use clean, reusable components instead of putting everything into a single large component.
 
-
-
 ---
-
-
 
 DATABASE ARCHITECTURE
 
-
-
 Design the database around relational data rather than storing routine information as images or hardcoded frontend objects.
-
-
 
 Create the following core tables.
 
-
-
 departments
 
-
-
 Fields:
-
-
 
 - id
 
@@ -182,31 +130,17 @@ Fields:
 
 - updated_at
 
-
-
 Example:
-
-
 
 CSE — Computer Science and Engineering
 
-
-
 The system must support multiple departments even though the initial data may only contain CSE.
-
-
 
 ---
 
-
-
 semesters
 
-
-
 Fields:
-
-
 
 - id
 
@@ -220,23 +154,13 @@ Fields:
 
 - updated_at
 
-
-
 A semester belongs to a department.
-
-
 
 ---
 
-
-
 sections
 
-
-
 Fields:
-
-
 
 - id
 
@@ -248,11 +172,7 @@ Fields:
 
 - updated_at
 
-
-
 Example:
-
-
 
 Section A
 
@@ -260,19 +180,11 @@ Section B
 
 Section C
 
-
-
 ---
-
-
 
 courses
 
-
-
 Fields:
-
-
 
 - id
 
@@ -290,23 +202,13 @@ Fields:
 
 - updated_at
 
-
-
 Course code must be unique within the appropriate scope.
-
-
 
 ---
 
-
-
 faculty
 
-
-
 Fields:
-
-
 
 - id
 
@@ -332,23 +234,13 @@ Fields:
 
 - updated_at
 
-
-
 Not every field needs to be mandatory.
-
-
 
 ---
 
-
-
 rooms
 
-
-
 Fields:
-
-
 
 - id
 
@@ -366,27 +258,15 @@ Fields:
 
 - updated_at
 
-
-
 Room number should be unique within a building.
-
-
 
 ---
 
-
-
 routine_entries
-
-
 
 This is the core table.
 
-
-
 Fields:
-
-
 
 - id
 
@@ -408,27 +288,15 @@ Fields:
 
 - updated_at
 
-
-
 The routine must reference the actual course, faculty, room and section records through foreign keys.
-
-
 
 Do NOT store course names, faculty names and room names repeatedly as plain text if a relational reference can be used.
 
-
-
 ---
-
-
 
 academic_notices
 
-
-
 Fields:
-
-
 
 - id
 
@@ -450,31 +318,17 @@ Fields:
 
 - updated_at
 
-
-
 ---
-
-
 
 USER / AUTHENTICATION FOUNDATION
 
-
-
 Set up Supabase authentication.
-
-
 
 There will eventually be two primary roles:
 
-
-
 Student
 
-
-
 Can:
-
-
 
 - View routines
 
@@ -486,15 +340,9 @@ Can:
 
 - Read notices
 
-
-
 Admin
 
-
-
 Can:
-
-
 
 - Manage routine
 
@@ -512,31 +360,17 @@ Can:
 
 - Manage notices
 
-
-
 Create the architecture for role-based access control.
-
-
 
 Do not allow normal students to access admin management functionality.
 
-
-
 Use secure Supabase Row Level Security policies rather than relying only on frontend route protection.
-
-
 
 ---
 
-
-
 DATABASE RELATIONSHIPS
 
-
-
 Establish proper foreign-key relationships:
-
-
 
 Department
 
@@ -546,19 +380,13 @@ Department
 
 → Routine Entries
 
-
-
 Department
 
 → Courses
 
-
-
 Department
 
 → Faculty
-
-
 
 Routine Entry
 
@@ -570,31 +398,17 @@ Routine Entry
 
 → Room
 
-
-
 Make sure deletes and updates use sensible foreign-key behavior.
-
-
 
 Avoid unnecessary cascading deletes that could accidentally remove large amounts of academic data.
 
-
-
 ---
-
-
 
 ROUTINE DESIGN
 
-
-
 The routine must be stored as structured data.
 
-
-
 For example:
-
-
 
 Section C
 
@@ -608,15 +422,9 @@ Faculty JRZ
 
 Room 415
 
-
-
 This should be represented through database relationships rather than as an image.
 
-
-
 The system should eventually be able to answer queries such as:
-
-
 
 - What classes does Section C have today?
 
@@ -630,31 +438,17 @@ The system should eventually be able to answer queries such as:
 
 - What classes does a particular faculty member teach?
 
-
-
 Design the schema so these queries will be efficient.
-
-
 
 ---
 
-
-
 INITIAL APPLICATION STRUCTURE
-
-
 
 Create a polished but restrained university-focused UI.
 
-
-
 Do NOT make it look like a generic SaaS dashboard.
 
-
-
 The design should feel:
-
-
 
 - Clean
 
@@ -672,179 +466,91 @@ The design should feel:
 
 - Minimal but not boring
 
-
-
 Use a white/light interface with blue as the primary accent.
-
-
 
 Avoid excessive gradients, excessive animations, huge decorative elements, and unnecessary glassmorphism.
 
-
-
 The interface should work particularly well on Android/mobile screens.
 
-
-
 ---
-
-
 
 INITIAL ROUTES
 
-
-
 Create the basic route structure:
-
-
 
 /
 
-
-
 Landing page
-
-
 
 /login
 
-
-
 Authentication
-
-
 
 /dashboard
 
-
-
 Student dashboard
-
-
 
 /routine
 
-
-
 Weekly routine
-
-
 
 /faculty
 
-
-
 Faculty directory
-
-
 
 /rooms
 
-
-
 Room finder
-
-
 
 /notices
 
-
-
 Academic notices
-
-
 
 /admin
 
-
-
 Admin dashboard
-
-
 
 /admin/routine
 
-
-
 /admin/faculty
-
-
 
 /admin/courses
 
-
-
 /admin/rooms
-
-
 
 /admin/sections
 
-
-
 /admin/notices
-
-
 
 These admin pages can initially contain well-designed placeholders where functionality is not implemented yet.
 
-
-
 ---
-
-
 
 LANDING PAGE
 
-
-
 Create an initial landing page explaining the platform.
-
-
 
 Possible messaging:
 
-
-
 "Your University, Organized."
-
-
 
 Supporting text:
 
-
-
 "Access your routine, faculty information, rooms, academic notices and more — all in one place."
-
-
 
 Include a clear CTA:
 
-
-
 "View My Routine"
-
-
 
 Do not make the landing page overly marketing-heavy.
 
-
-
 The actual application should be the main focus.
-
-
 
 ---
 
-
-
 STUDENT DASHBOARD FOUNDATION
 
-
-
 Create a dashboard that will eventually show:
-
-
 
 - Selected department
 
@@ -864,35 +570,19 @@ Create a dashboard that will eventually show:
 
 - Notices
 
-
-
 For now, build the UI and data-loading architecture cleanly.
-
-
 
 If no section has been selected, show an onboarding state asking the student to select:
 
-
-
 Department → Semester → Section
-
-
 
 Store the selected context appropriately so the user does not need to repeatedly select it during the same session.
 
-
-
 ---
-
-
 
 ADMIN DASHBOARD FOUNDATION
 
-
-
 Create an admin dashboard with summary cards:
-
-
 
 - Departments
 
@@ -908,27 +598,15 @@ Create an admin dashboard with summary cards:
 
 - Notices
 
-
-
 The numbers should eventually come from Supabase.
-
-
 
 For this phase, establish the structure and data-fetching pattern.
 
-
-
 ---
-
-
 
 COMPONENT ARCHITECTURE
 
-
-
 Create reusable components such as:
-
-
 
 - Navbar
 
@@ -958,23 +636,13 @@ Create reusable components such as:
 
 - Routine card
 
-
-
 Avoid duplicated UI logic.
-
-
 
 ---
 
-
-
 TYPES
 
-
-
 Create proper TypeScript types/interfaces for:
-
-
 
 - Department
 
@@ -994,31 +662,17 @@ Create proper TypeScript types/interfaces for:
 
 - User/Profile
 
-
-
 Use generated Supabase database types if practical.
-
-
 
 Avoid using "any" unless absolutely necessary.
 
-
-
 ---
-
-
 
 SECURITY
 
-
-
 Security is important.
 
-
-
 Implement:
-
-
 
 - Supabase Row Level Security
 
@@ -1032,23 +686,13 @@ Implement:
 
 - Environment variables for sensitive configuration
 
-
-
 Never expose Supabase service-role credentials in the client.
-
-
 
 ---
 
-
-
 DATA VALIDATION
 
-
-
 Prepare the architecture for validation of:
-
-
 
 - Invalid time ranges
 
@@ -1060,19 +704,11 @@ Prepare the architecture for validation of:
 
 - Section conflicts
 
-
-
 Full conflict detection can be implemented in a later phase, but the database and code should make it possible.
-
-
 
 ---
 
-
-
 IMPORTANT DEVELOPMENT RULES
-
-
 
 1. Do not hardcode the university routine into React components.
 
@@ -1094,19 +730,11 @@ IMPORTANT DEVELOPMENT RULES
 
 10. Do not implement AI functionality yet.
 
-
-
 ---
-
-
 
 FUTURE ARCHITECTURE
 
-
-
 Keep the architecture ready for future modules:
-
-
 
 - Exam routine
 
@@ -1128,27 +756,15 @@ Keep the architecture ready for future modules:
 
 - Natural language routine search
 
-
-
 These should be possible without redesigning the core routine database.
-
-
 
 ---
 
-
-
 BEFORE CODING
-
-
 
 First inspect and reason about the complete architecture.
 
-
-
 Then:
-
-
 
 1. Create the database schema.
 
@@ -1168,15 +784,9 @@ Then:
 
 9. Make sure the project runs without TypeScript/build errors.
 
-
-
 Do NOT move on to advanced features yet.
 
-
-
 At the end, give me a concise summary of:
-
-
 
 - What was created
 
@@ -1191,8 +801,6 @@ At the end, give me a concise summary of:
 - What remains for Phase 2
 
 - Any configuration or environment variables I need to provide
-
-
 
 Most importantly: prioritize a solid backend/data architecture over adding lots of visual features in this first phase.
 

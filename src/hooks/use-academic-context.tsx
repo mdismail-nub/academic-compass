@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { saveAcademicSelection } from "@/lib/api";
 import type { AcademicSelection } from "@/lib/types";
 import { useAuth } from "./use-auth";

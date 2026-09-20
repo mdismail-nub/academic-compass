@@ -1,0 +1,6 @@
+{
+  "name": "Academic Compass",
+  "description": "Academic Compass routine and academic management system for universities, departments, courses, routines, and notices.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

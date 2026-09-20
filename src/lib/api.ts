@@ -8,7 +8,9 @@ import type {
   Faculty,
   Profile,
   Room,
+  RoutineEntry,
   RoutineEntryDetailed,
+  RoutineEntryInsert,
   Section,
   Semester,
   UserRoleRow,
@@ -39,7 +41,9 @@ export const queryKeys = {
   courses: (departmentId?: string | null) => ["courses", departmentId ?? null] as const,
   faculty: (departmentId?: string | null) => ["faculty", departmentId ?? null] as const,
   rooms: ["rooms"] as const,
-  routineBySection: (sectionId?: string | null) => ["routine", "section", sectionId ?? null] as const,
+  routineBySection: (sectionId?: string | null) =>
+    ["routine", "section", sectionId ?? null] as const,
+  allRoutineEntries: ["routine", "all"] as const,
   notices: ["notices"] as const,
   profile: (userId?: string | null) => ["profile", userId ?? null] as const,
   roles: (userId?: string | null) => ["roles", userId ?? null] as const,
@@ -134,6 +138,20 @@ export const routineBySectionQuery = (sectionId: string | null) =>
     },
   });
 
+export const allRoutineEntriesQuery = () =>
+  queryOptions({
+    queryKey: queryKeys.allRoutineEntries,
+    queryFn: async (): Promise<RoutineEntryDetailed[]> => {
+      const { data, error } = await supabase
+        .from("routine_entries")
+        .select(ROUTINE_SELECT)
+        .order("day_of_week")
+        .order("start_time");
+      if (error) throw new Error(error.message);
+      return (data ?? []) as unknown as RoutineEntryDetailed[];
+    },
+  });
+
 export const noticesQuery = () =>
   queryOptions({
     queryKey: queryKeys.notices,
@@ -211,4 +229,38 @@ export async function saveAcademicSelection(
     })
     .eq("id", userId);
   if (error) throw new Error(error.message);
+}
+
+export async function createRoutineEntry(entry: RoutineEntryInsert): Promise<RoutineEntry> {
+  const { data, error } = await supabase.from("routine_entries").insert(entry).select().single();
+  if (error) throw new Error(error.message);
+  return data as RoutineEntry;
+}
+
+export async function updateRoutineEntry(
+  id: string,
+  entry: Partial<RoutineEntryInsert>,
+): Promise<RoutineEntry> {
+  const { data, error } = await supabase
+    .from("routine_entries")
+    .update(entry)
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) throw new Error(error.message);
+  return data as RoutineEntry;
+}
+
+export async function deleteRoutineEntry(id: string): Promise<void> {
+  const { error } = await supabase.from("routine_entries").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function batchCreateRoutineEntries(
+  entries: RoutineEntryInsert[],
+): Promise<{ count: number }> {
+  if (entries.length === 0) return { count: 0 };
+  const { data, error } = await supabase.from("routine_entries").insert(entries).select();
+  if (error) throw new Error(error.message);
+  return { count: (data ?? []).length };
 }
